@@ -6,39 +6,75 @@ const Search=()=>{
     const [term , setTerm]=useState('');
     const [results,setResults] =useState([]);
 
-    console.log(results);
+    // console.log(results);
     // console.log("I only run with every render")
 
     // useEffect(()=>{
     //     console.log("I only run once");
     // },[ ])
     // useEffect(()=>{
-    //     console.log("I  run after every render and at initial ender");
+    //     console.log("I  run after every render and at initial render");
     // })
     // useEffect(()=>{
-    //     console.log("I  run after every render and at initial ender and chnge of data");
+    //     console.log("I  run after every render and at initial render and chnge of data");
     // },[term])
 
     useEffect(()=>{
-       const search=async()=>{
-           const {data}= await axios.get('https://en.wikipedia.org/w/api.php',{
-            params: {
-                action:'query',
-                list:'search',
-                origin:'*',
-                format:'json',
-                srsearch:term, 
-            },
+       const search=async()=>
+       {
+           const {data}= await axios.get('https://en.wikipedia.org/w/api.php',
+           {
+                params: {
+                    action:'query',
+                    list:'search',
+                    origin:'*',
+                    format:'json',
+                    srsearch:term, 
+                },
 
-        });
-        setResults(data.query.search);
+            });
+            setResults(data.query.search);
         };
-        if (term){
-        search();
+        if(term && !results.length){
+            search();
         }
-    },[term]);
+        else{
+            const timeoutId = setTimeout(()=>{ if (term){
+                search();
+                }
+            },500);
+            return()=>{
+                clearTimeout(timeoutId);
+            };
+
+        }
+              
+
+
+    }
+    ,[term]);
     
-    const renderedResults = results.map(()=>{
+    const renderedResults = results.map((result)=>{
+        return (<div key={result.pageeid} className="item">
+            <div className="right floated content">
+                <a 
+                className="ui button"
+                href={`https://en.wikipedia.org?curid=${result.snippet}`}
+                >
+                    GO!
+                </a>
+            </div>
+
+            <div className="content">
+            <div className="header">
+                {result.title}
+                </div>
+                <span dangerouslySetInnerHTML={{__html:result.snippet}}>
+                    </span>
+                
+
+            </div>
+        </div>);
 
     });
 
@@ -56,6 +92,9 @@ const Search=()=>{
                     
 
                 </div>
+            </div>
+            <div className="ui celled list">
+                {renderedResults}
             </div>
         </div>
        
