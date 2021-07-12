@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 // import Accorrdion from './components/Accordion';
 // import Search from './components/Search';
 import Dropdown from './components/Dropdown';
+import Translate from './components/Translate';
 
 
 const items =[
@@ -34,12 +35,18 @@ const options =[
 ];
 
 export default()=>{
-    const[selected,setSelected]=useState(options[0]);
+    // const[selected,setSelected]=useState(options[0]);
+    // const[showDropdown,setShowDropdown]=useState(true);
     return (<div>
-        < Dropdown 
+        <Translate />
+        {/* <button onClick ={
+            ()=>setShowDropdown(!showDropdown)
+        }> Togggle dropdown</button>
+       {   showDropdown?
+       < Dropdown 
         selected={selected}
         onSelectedChange={setSelected}
-         options={options}/>
+         options={options}/>:null} */}
         {/* <Search/> */}
         {/* <Accorrdion items={items} /> */}
     </div>); 
